@@ -14,6 +14,8 @@ Unlike traditional file-syncing tools that scan entire directories or rely on he
 2. **Journal Index (The Signal Bus):** A sequential log of changes (CREATE, MOVE, COPY, DELETE) managed by a Global Sequence ID (`gsid`). Offline servers use this to "replay" missed events and catch up instantly upon reconnecting.
 3. **Transfer Index (The I/O Bridge):** Used strictly for `CREATE` operations. Large files are shredded into 10MB chunks and tracked here while they buffer through Google Drive, allowing for parallel uploading and random-access `seek()` downloading.
 
+![MPSAS FSM Architecture Diagram](MPSAS.drawio.png)
+
 ### 🛡️ Automated Janitor (Resource Management)
 To prevent the 15GB Cloud RAM from overflowing, a multi-threaded Janitor monitors all active nodes. Only when a consensus is reached (all active servers report `status: COMPLETED`), the system purges the binary chunks from Google Drive and prunes the Journal Index.
 
